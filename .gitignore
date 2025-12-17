@@ -10,7 +10,5 @@ env
 # Cache Files
 __pycache__/
 *.pyc
-# 1
-
 
 
