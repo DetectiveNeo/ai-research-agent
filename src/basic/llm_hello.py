@@ -1,14 +1,12 @@
-import subprocess
+from openai import OpenAI
 
-OLLAMA_PATH = r"C:/Users/meghw/AppData/Local/Programs/Ollama/ollama.exe"
+client = OpenAI()
 
-def ask_ollama(promt: str):
-    result = subprocess.run(
-        [OLLAMA_PATH, "run", "llama3.2"],
-        input= promt.encode(),
-        stdout= subprocess.PIPE
-    )
-    print(result.stdout.decode())
+response = client.responses.create(
+    model="gpt-4.1-mini",
+    input="Explain what a bottle is in simple terms."
+)
 
-if __name__ == "__main__":
-    ask_ollama(("Explain what an LLM in simple words."))
+print(response.output_text)
+
+
