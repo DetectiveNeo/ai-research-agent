@@ -3,5 +3,8 @@
 env
 
 
+# API Key File
+.env
+
 
 

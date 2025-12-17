@@ -1,6 +1,7 @@
 from openai import OpenAI
+from src.config import OPENAI_API_KEY
 
-client = OpenAI()
+client = OpenAI(api_key= OPENAI_API_KEY)
 
 SYSTEM_PROMT = """
 You are an AI research assistant.
