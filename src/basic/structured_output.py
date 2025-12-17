@@ -44,14 +44,16 @@ raw_output = response.output_text
 
 print(f'Raw Output : {raw_output}')
 
-parsed = json.loads(raw_output)
+parsed_output = json.loads(raw_output)
 
 print('------------------------------------------------------------------')
 
-print('Parsed Output')
-print(f"Heading : {parsed['heading']}")
+print('Parsed_output Output')
+print(f"Heading : {parsed_output['heading']}")
 print('Key Points')
-for i, point in enumerate(parsed['content']):
+for i, point in enumerate(parsed_output['content']):
     print(f'Point Number {i} : {point}')
 
+with open("json_generated/structured_ouput_py", "w") as file:
+    json.dump(parsed_output, file, indent= 4)
 

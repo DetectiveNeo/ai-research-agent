@@ -1,10 +1,14 @@
+# Data Folder
+data
 
 # Environment Folder
 env
 
-
 # API Key File
 .env
 
+# Cache Files
+__pycache__/
+*.pyc
 
 
