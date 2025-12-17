@@ -9,7 +9,7 @@ You are an AI research assistant.
 You must respond only in JSON format.
 No markdowm
 No code fences
-No explanation
+Explanation Should be in Simple words
 
 Expected JSON Format :
 {
@@ -23,9 +23,9 @@ USER_PROMPT = """
 What is a bottle ?
 """
 
-responses = client.responses.create(
+response = client.responses.create(
     model= 'gpt-4.1-mini',
-    output= [
+    input= [
         {
             'role' : 'system',
             'content' : SYSTEM_PROMPT
@@ -37,5 +37,18 @@ responses = client.responses.create(
     ]
 )
 
-print(responses.output_text)
+raw_output = response.output_text
+
+print(f'Raw Output : {raw_output}')
+
+parsed = json.loads(raw_output)
+
+print('------------------------------------------------------------------')
+
+print('Parsed Output')
+print(f"Heading : {parsed['heading']}")
+print('Key Points')
+for i, point in enumerate(parsed['content']):
+    print(f'Point Number {i} : {point}')
+
 

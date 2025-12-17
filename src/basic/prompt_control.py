@@ -3,6 +3,11 @@ from src.config import OPENAI_API_KEY
 
 client = OpenAI(api_key= OPENAI_API_KEY)
 
+"""
+SYSTEM PROMPT defines the rules of the universe for the model. A Operating Policy , A constiution
+Properties : Highest Priority, Cannot be overidden , should be stable across calls.
+"""
+
 SYSTEM_PROMT = """
 You are an AI research assistant.
 Follow these rules strictly.
