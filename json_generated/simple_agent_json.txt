@@ -1,1 +1,1 @@
-"bottle is a container for liquids"
+"A Calendar is a system to organize days."

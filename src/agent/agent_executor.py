@@ -1,0 +1,105 @@
+"""
+Docstring for src.agent.agent_executor
+
+An agent does the following thingh necessarily
+1) Think/Plan : LLM plans the tool
+2) Act : your code executes something
+3) Observe/Stop : agent decides it is done
+
+Simple AI agent AI decides what to do next and the Python code does it.
+
+"""
+
+from openai import OpenAI
+import json
+from src.config import OPENAI_API_KEY
+from src.agent.tools import write_file, finish
+
+client = OpenAI(api_key= OPENAI_API_KEY)
+
+SYSTEM_PROMPT = """
+You are a simple Python AI Agent.
+
+Your job is to decide the next tool needed to complete task.
+
+You must respond ONLY with valid JSON.
+
+{
+    "thought" : string,
+    "tool" : "write_file" or "finish",
+    "tool_input" : {
+            "content" : string
+        }
+}
+
+Rules :
+- Choose exactly one tool at a time "write_file" or "finish"
+- If you recieve confirmation that the Task is completed then you mush choose tool "finish"
+- Content should be in simple plain words. (Maximum Words allowed : 10)
+- No Markdown no explanations
+"""
+
+TOOLS = {
+    "write_file" : write_file,
+    "finish" : finish
+}
+
+
+TASK = "What is a Calendar ? save it in a file"
+
+
+def call_llm(model= "gpt-4.1-mini", SYSTEM_PROMPT= SYSTEM_PROMPT, TASK= TASK):
+    response = client.responses.create(
+        model= model,
+        input= [
+                {
+                    "role" : "system",
+                    "content" : SYSTEM_PROMPT
+                },
+                {
+                    "role" : "user",
+                    "content" : TASK
+                }
+            ]
+    )
+    return response.output_text
+
+def parse_agent_output(raw_output):
+    parsed_output = json.loads(raw_output)
+    return parsed_output
+
+def execute_tool(parsed_output):
+    tool_name = parsed_output['tool']
+
+    tool_input = parsed_output['tool_input']
+
+    observation = TOOLS[tool_name](**tool_input)
+
+    return observation
+
+if __name__ == "__main__":
+     
+    # Agent Plans
+    raw_output = call_llm(SYSTEM_PROMPT= SYSTEM_PROMPT, TASK= TASK)
+
+    print(raw_output)
+
+    parsed_output = parse_agent_output(raw_output)
+
+    print(parsed_output)
+
+    # Tools Execute and observations are returned
+    observation = execute_tool(parsed_output= parsed_output)
+
+    print('----------------------------------------------------------------------------')
+
+    # Agent Observes the output and again plans
+    raw_output = call_llm(SYSTEM_PROMPT= SYSTEM_PROMPT, TASK= observation)
+
+    print(raw_output)
+
+    parsed_output = parse_agent_output(raw_output)
+
+    # Tools are executed
+    observation = execute_tool(parsed_output= parsed_output)
+
