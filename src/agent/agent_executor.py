@@ -13,7 +13,7 @@ Simple AI agent AI decides what to do next and the Python code does it.
 from openai import OpenAI
 import json
 from src.config import OPENAI_API_KEY
-from src.agent.tools import write_file, finish
+from src.agent.tools import write_file, finish, retrieve_documents
 
 client = OpenAI(api_key= OPENAI_API_KEY)
 
@@ -26,20 +26,21 @@ You must respond ONLY with valid JSON.
 
 {
     "thought" : string,
-    "tool" : "write_file" or "finish",
+    "tool" : "retrieve_documents" or "write_file" or "finish",
     "tool_input" : {
             "content" : string
         }
 }
 
 Rules :
-- Choose exactly one tool at a time "write_file" or "finish"
+- Choose exactly one tool at a time "retrieve_documents" or "write_file" or "finish"
 - If you recieve confirmation that the Task is completed then you mush choose tool "finish"
 - Content should be in simple plain words. (Maximum Words allowed : 10)
 - No Markdown no explanations
 """
 
 TOOLS = {
+    "retrieve_documents" : retrieve_documents,
     "write_file" : write_file,
     "finish" : finish
 }

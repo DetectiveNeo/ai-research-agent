@@ -12,4 +12,7 @@ def write_file(content: str):
 def finish(content: str):
     return exit(0)
 
+def retrieve_documents(content: str):
+    ...
+
 
